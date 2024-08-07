@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISL Recognition and Translation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="../static/css/style.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .result-container {
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid black;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4); 
+        }
+        .image-container, .text-container {
+            width: 48%;
+        }
+        .webcam {
+            margin-top: 20px;
+        }
+        span.badge.new {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <h3 class="center-align">ISL SignSpeak Translator</h3>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 center-align">
+                <span class="new badge left" data-badge-caption="Upload Method">Image</span>
+                <form method="post" enctype="multipart/form-data">
+                    <!-- Model selection -->
+                    <div class="input-field col s12">
+                        <select name="model">
+                            <option value="" disabled selected>Choose your model</option>
+                            <option value="yolov5">YOLOv5</option>
+                            <option value="yolov10">YOLOv10</option>
+                        </select>
+                        <label>Model</label>
+                    </div>
+
+                    <!-- Language selection -->
+                    <div class="input-field col s12">
+                        <select name="language">
+                            <option value="" disabled selected>Choose translated language</option>
+                            <option value="hi">Hindi</option>
+                            <option value="en">English</option>
+                            <option value="ta">Tamil</option>
+                            <option value="mr">Marathi</option>
+                            <option value="en">English</option>
+                            <option value="gd">Gaelic</option>
+                        </select>
+                        <label>Translated Language</label>
+                    </div>
+
+                    <!-- File upload -->
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>File</span>
+                            <input type="file" name="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Upload Image for detection">
+                        </div>
+                    </div>
+
+                    <!-- Submit button -->
+                    <div class="center-align">
+                        <button class="btn waves-effect waves-light" type="submit">Upload and Process</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col s12 center-align webcam">
+                <span class="new badge left" data-badge-caption="Upload Method">Webcam</span>
+                <form method="post" action="/" class="webcam-container">
+                    <input type="hidden" name="webcam" value="true">
+                    <!-- Model selection -->
+                    <div class="input-field col s12">
+                        <select name="model">
+                            <option value="" disabled selected>Choose your model</option>
+                            <option value="yolov5">YOLOv5</option>
+                            <option value="yolov10">YOLOv10</option>
+                        </select>
+                        <label>Model</label>
+                    </div>
+
+                    <!-- Language selection -->
+                    <div class="input-field col s12">
+                        <select name="language">
+                            <option value="" disabled selected>Choose translated language</option>
+                            <option value="hi">Hindi</option>
+                            <option value="en">English</option>
+                            <option value="ta">Tamil</option>
+                            <option value="mr">Marathi</option>
+                            <option value="en">English</option>
+                            <option value="gd">Gaelic</option>
+                        </select>
+                        <label>Translated Language</label>
+                    </div>
+
+                    <!-- Submit button -->
+                    <div class="center-align">
+                        <button class="btn waves-effect waves-light" type="submit">Use Webcam</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        // Initialize the select elements
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems, {});
+        });
+    </script>
+</body>
+</html>

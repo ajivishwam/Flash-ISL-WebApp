@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Indian Sign Language Recognition & Translation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .result-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .image-container, .text-container {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <h3 class="center-align">ISL SignSpeak Translator</h3>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="result-container">
+            <div class="image-container">
+                <h3>Detected Image</h3>
+                <img src="{{ url_for('annotated_file', filename=filename) }}" alt="Annotated Image" class="responsive-img">
+                <p><b>Processing Time:</b> {{ processing_time }} seconds</p>
+            </div>
+            <div class="text-container">
+                <h3>Detected Word and Translation</h3>
+                {% if zipped_data %}
+                <ul class="collection">
+                    {% for word, translated_text, audio_file in zipped_data %}
+                    <li class="collection-item">
+                        <p><b>Detected Word:</b> {{ word }}</p>
+                        <p><b>Translated Word:</b> {{ translated_text }}</p>
+                        <p><b>Audio:</b></p>
+                        <audio controls>
+                            <source src="{{ url_for('audio_file', filename=audio_file) }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="flow-text red">No words were detected from the sign language input. Please try again.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="center-align">
+            <a href="/" class="btn waves-effect waves-light">Go Back</a>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
