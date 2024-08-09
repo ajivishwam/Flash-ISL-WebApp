@@ -1,18 +1,18 @@
-# Indian Sign Language Detection Application
+# Indian Sign Language Detection and Translation Application
 
-This project is a Indian Sign Language Detection web application that allows users to upload images, videos, or use their webcam to perform object detection using YOLO models (YOLOv5 or YOLOv10). The detected objects can be translated into various Indian languages, and the translated text can be converted to speech.
+This project is a Indian Sign Language Detection web application that allows users to upload static sign images, or use their webcam to perform Indian Sign Language(ISL) detection using YOLO models (YOLOv5 or YOLOv10). The detected signs can be translated into various Indian languages, and the translated text can be converted to speech.
 
 ## Features
 
-- Upload images and videos or use the webcam for object detection
-- Choose between YOLOv5 and YOLOv8 models
+- Upload static sign images or use the webcam for sign detection
+- Choose between YOLOv5 and YOLOv10 models
 - Translate detected text into various Indian languages
 - Text-to-speech conversion for translated text
-- Reset button to clear results
+- Go back button to clear results
 
 ## Requirements
 
-- Python 3.7 or higher
+- Python 3.8 or higher
 - Pip (Python package installer)
 
 ## Installation
@@ -20,23 +20,24 @@ This project is a Indian Sign Language Detection web application that allows use
 1. Clone the repository:
 
 ```sh
-git clone <repository-url>
-cd <repository-name>
+git clone https://github.com/ajivishwam/Flash-ISL-WebApp.git
+cd Flash-ISL-WebApp
 ```
-
-2. Create a virtual environment
-```sh
-python -m venv venv
-```
-3. Activate the virtual environment
-```sh
-venv\Scripts\activate (Windows)
-venv\Scripts\activate (Mac OS)
-myenv\Scripts\activate     
-```
-4. Install the required dependencies
+2. Install the required dependencies
 ```sh
 pip install -r requirements.txt
+```
+3. Create a virtual environment for FinalYOLOv5. 
+Run the below script using Git Bash or shell that support `.sh` files
+```sh
+cd FinalYOLOv5/
+.setup.sh
+```
+4. Create a virtual environment for FinalYOLOv10. 
+Run the below script using Git Bash or shell that support `.sh` files
+```sh
+cd FinalYOLOv10/
+.setup.sh
 ```
 
 ## Running the Application
@@ -47,19 +48,29 @@ python app.py
 ```
 2. Open your web browser and go to `http://127.0.0.1:5000`.
 
-## File Structure
-.
-├── app.py                # Main Flask application
-├── static/               # Static files (CSS, JS, etc.)
-│   └── style.css         # CSS styles
-├── templates/            # HTML templates
-│   └── index.html        # Main HTML template
-├── trained_model/        # Trained Best models
-│   ├── yolov5/best.pt    # Trained YOLOv5 model
-│   └── yolov10/best.pt   # Trained YOLOv10 model
-├── models/               # YOLO models
-│   ├── yolov5.py         # YOLOv5 model handling
-│   └── yolov10.py        # YOLOv10 model handling
-├── temp/                 # Directory for uploaded files
-├── requirements.txt      # List of dependencies
-└── README.md             
+## Folder Structure
+```sh
+├── app.py
+├── FinalYolov5/               
+│   └── run_model_v5.py 
+├── FinalYolov10/               
+│   └── run_model_v10.py             
+├── static/               
+│   └── css/ 
+│       └── style.css
+│   └── annotated_results/ 
+│   └── uploads/          
+├── templates/            
+│   └── index.html 
+|   └── result.html       
+├── trained_model/        
+│   ├── yolov5/best.pt    
+│   └── yolov10/best.pt   
+├── models/               
+│   ├── yolov5.py        
+│   └── yolov10.py        
+├── temp/                 
+├── requirements.txt      
+└── README.md  
+
+```

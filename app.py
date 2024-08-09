@@ -1,11 +1,15 @@
 import os
 import subprocess
 import json
+from pathlib import Path
 from flask import Flask, request, redirect, render_template, flash, send_from_directory
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'isl'
+
+# Base directory
+base_dir = Path(__file__).resolve().parent
 
 # Configuration
 UPLOAD_FOLDER = 'static/uploads'
@@ -14,7 +18,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['ANNOTATED_FOLDER'] = ANNOTATED_FOLDER
 
-# Ensure the upload and annotated folders exist
+# Ensure upload and annotated folders exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(ANNOTATED_FOLDER, exist_ok=True)
 
@@ -25,13 +29,13 @@ def run_model_v5(filepath, model='yolov5', is_webcam=False):
     try:
         if model == 'yolov5':
             model_command = [
-                'C:\\Users\\Avishwa\\Flask-app\\FinalYolov5\\myenv1\\Scripts\\python.exe',
-                'C:\\Users\\Avishwa\\Flask-app\\FinalYolov5\\test_model.py'
+                str(base_dir / 'FinalYolov5' / 'myenv1' / 'Scripts' / 'python.exe'),
+                str(base_dir / 'FinalYolov5' / 'run_model_v5.py')
             ]
         elif model == 'yolov10':
             model_command = [
-                'C:\\Users\\Avishwa\\Flask-app\\FinalYolov10\\testenv\\Scripts\\python.exe',
-                'C:\\Users\\Avishwa\\Flask-app\\FinalYolov10\\test_modelv10.py'
+                str(base_dir / 'FinalYolov10' / 'testenv' / 'Scripts' / 'python.exe'),
+                str(base_dir / 'FinalYolov10' / 'run_model_v10.py')
             ]
         else:
             flash('Invalid model selection.')
