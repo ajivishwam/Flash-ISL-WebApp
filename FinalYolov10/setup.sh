@@ -21,8 +21,9 @@ eval $VENV_ACTIVATE
 # Install dependencies
 echo "Installing dependencies..."
 $PIP install gtts
+$PIP install ultralytics
 $PIP install googletrans==4.0.0-rc1
-$PIP install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0
+$PIP install torch==2.3.1 torchvision==0.18.0 torchaudio==2.3.1
 $PIP install opencv-python
 $PIP install opencv-python-headless
 $PIP install pandas

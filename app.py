@@ -25,7 +25,7 @@ os.makedirs(ANNOTATED_FOLDER, exist_ok=True)
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def run_model_v5(filepath, model='yolov5', is_webcam=False):
+def run_model_v5(filepath=None, model='yolov5', is_webcam=False, language='hi'):
     try:
         if model == 'yolov5':
             model_command = [
@@ -41,12 +41,15 @@ def run_model_v5(filepath, model='yolov5', is_webcam=False):
             flash('Invalid model selection.')
             return None, None
 
+        # Include the language parameter
+        command = model_command + ['--lang', language]
+
         if is_webcam:
-            command = model_command + ['--webcam']
+            command += ['--webcam']
 
             result_file_json = os.path.join(app.config['ANNOTATED_FOLDER'], 'webcam_result.json')
         else:
-            command = model_command + [filepath]
+            command += [filepath]
 
             result_file = os.path.join(app.config['ANNOTATED_FOLDER'], 'annotated_' + os.path.basename(filepath))
             json_filename = 'result_' + os.path.splitext(os.path.basename(filepath))[0] + '.json'
@@ -98,7 +101,7 @@ def index():
                 print(f"File saved to {filepath}")
 
                 # Run the model on the uploaded file
-                result_file, result_data = run_model_v5(filepath, model=model)
+                result_file, result_data = run_model_v5(filepath, model=model, language=language)
                 print(f"Result file: {result_file}, Result data: {result_data}")
 
                 if result_file:
@@ -119,7 +122,7 @@ def index():
                     return redirect(request.url)
         elif 'webcam' in request.form:
             # Run the model for webcam
-            result_file, result_data = run_model_v5(is_webcam=True, model=model)
+            result_file, result_data = run_model_v5(is_webcam=True, model=model, language=language)
             print(f"Webcam result file: {result_file}, Result data: {result_data}")
 
             if result_file:

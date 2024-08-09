@@ -10,6 +10,7 @@ from googletrans import Translator
 from gtts import gTTS
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.abspath(os.path.join(base_dir, os.pardir))
 
 # Fix for PosixPath on Windows
 pathlib.PosixPath = pathlib.WindowsPath
@@ -17,8 +18,7 @@ pathlib.PosixPath = pathlib.WindowsPath
 # Configuration
 model_path = os.path.join(base_dir, 'trained_model', 'best.pt')
 resize_size = (256, 256)  # Resize images to 256x256
-output_path = os.path.join(base_dir, 'static', 'annotated_results') 
-language_code = 'hi'  # Default translation language
+output_path = os.path.join(root_dir, 'static', 'annotated_results') 
 
 # Create output directory if it doesn't exist
 os.makedirs(output_path, exist_ok=True)
@@ -38,11 +38,12 @@ def translate_text(text, lang_code):
 
 def text_to_speech(text, file_path):
     """Convert text to speech and save as an audio file."""
-    tts = gTTS(text=text, lang='en')  # Use 'en' for English, adjust as needed
+    tts = gTTS(text=text, lang=language_args)
     tts.save(file_path)
 
-def process_frame(frame):
+def process_frame(frame, language_args):
     """Perform inference on a single frame and draw bounding boxes."""
+
     results = model(frame)
     detections = results.xyxy[0].cpu().numpy()  # x1, y1, x2, y2, conf, cls
     detected_words = []
@@ -55,7 +56,7 @@ def process_frame(frame):
         detected_words.append(model.names[int(cls)])
         
         # Translate detected text
-        translated_text = translate_text(model.names[int(cls)], language_code)
+        translated_text = translate_text(model.names[int(cls)], language_args)
         translated_texts.append(translated_text)
 
         # Generate audio for translated text
@@ -94,7 +95,7 @@ def run_image_file(image_path):
     image = cv2.resize(image, resize_size)
 
     # Process the image
-    annotated_image, detected_words, translated_texts, audio_files = process_frame(image)
+    annotated_image, detected_words, translated_texts, audio_files = process_frame(image, language_args)
 
     # Save the result with a new name
     save_path = os.path.join(output_path, 'annotated_' + os.path.basename(image_path))
@@ -140,12 +141,16 @@ def run_webcam():
         frame = cv2.resize(frame, resize_size)
 
         # Process the frame
-        processed_frame, detected_words, translated_texts, audio_files = process_frame(frame)
+        try:
+            processed_frame, detected_words, translated_texts, audio_files = process_frame(frame, language_args)
+        except Exception as e:
+            print(f"Error processing frame in YOLOv5: {e}")
+            continue
 
         # Save the result with a fixed name
-        save_path = os.path.join(output_path, 'webcam_output.jpg')
-        print(f"Saving results to: {save_path}")
+        save_path = os.path.join(output_path, f'webcam_output_{int(time.time())}.jpg')
         cv2.imwrite(save_path, processed_frame)
+        print(f"Saving results to: {save_path}")
 
         # Save additional data
         result = {
@@ -194,7 +199,9 @@ if __name__ == '__main__':
     parser.add_argument('--lang', default='hi', help='Language code for translation')
     args = parser.parse_args()
 
-    language_code = args.lang  # Update language code for translation
+    # Update language code for translation
+    language_args = args.lang
+    print(f"Selected language: {language_args}")
 
     if args.webcam:
         run_webcam()
