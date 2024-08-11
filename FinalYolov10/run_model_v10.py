@@ -188,9 +188,8 @@ def run_webcam():
         print(f"JSON file updated with processing time at {json_save_path}")
     except Exception as e:
         print(f"Error saving JSON file: {e}")
-
-    cap.release()
-    cv2.destroyAllWindows()
+    
+    return result
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run YOLOv10 model')

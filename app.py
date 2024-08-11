@@ -46,7 +46,7 @@ def run_model_v5(filepath=None, model='yolov5', is_webcam=False, language='hi'):
 
         if is_webcam:
             command += ['--webcam']
-
+            result_file = None
             result_file_json = os.path.join(app.config['ANNOTATED_FOLDER'], 'webcam_result.json')
         else:
             command += [filepath]
